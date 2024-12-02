@@ -1,9 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 
+interface ErrorDetails {
+  name?: string;
+  message?: string;
+  stack?: string;
+}
+
 interface ErrorResponse {
   success: false;
   message: string;
-  errorDetails?: any;
+  errorDetails?: ErrorDetails;
 }
 
 const globalErrorHandler = (
@@ -22,11 +28,17 @@ const globalErrorHandler = (
 
   // Optionally add error details in development
   if (process.env.NODE_ENV === 'development') {
-    errorResponse.errorDetails = error;
+    errorResponse.errorDetails = {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    };
   }
 
   // Log the error for server-side tracking
   console.error('Global Error Handler:', error);
+
+  next(error);
 
   return res.status(statusCode).json(errorResponse);
 };

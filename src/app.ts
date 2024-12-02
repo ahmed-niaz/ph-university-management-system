@@ -1,6 +1,4 @@
-import express, { Application, Request, Response } from 'express';
-// import userRouter from './modules/user/user.router';
-// import studentRouter from './modules/student/student.router';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import notFound from './middlewares/notFound';
 import router from './routes';
@@ -19,9 +17,13 @@ app.get('/', async (req: Request, res: Response) => {
   });
 });
 
-app.use(globalErrorHandler);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  globalErrorHandler(err, req, res, next);
+});
 
 // not found
-app.use(notFound);
+app.use((req: Request, res: Response, next: NextFunction) => {
+  notFound(req, res, next);
+});
 
 export default app;
