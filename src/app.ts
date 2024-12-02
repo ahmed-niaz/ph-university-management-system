@@ -1,14 +1,16 @@
 import express, { Application, Request, Response } from 'express';
-import userRouter from './modules/user/user.router';
-import studentRouter from './modules/student/student.router';
+// import userRouter from './modules/user/user.router';
+// import studentRouter from './modules/student/student.router';
 import globalErrorHandler from './middlewares/globalErrorHandler';
+import notFound from './middlewares/notFound';
+import router from './routes';
 
 const app: Application = express();
 
 app.use(express.json());
 
-app.use('/api/users', userRouter);
-app.use('/api/student', studentRouter);
+// application routes
+app.use('/api', router);
 
 app.get('/', async (req: Request, res: Response) => {
   res.send({
@@ -18,4 +20,8 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.use(globalErrorHandler);
+
+// not found
+app.use(notFound);
+
 export default app;
