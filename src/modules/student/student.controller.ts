@@ -1,55 +1,40 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { RequestHandler } from 'express';
 import { studentService } from './student.service';
 import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
 
-const getStudent: RequestHandler = async (req, res, next) => {
-  try {
-    const result = await studentService.getStudent();
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Student retrieved successfully',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+const getStudent = catchAsync(async (req, res) => {
+  const result = await studentService.getStudent();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Student retrieved successfully',
+    data: result,
+  });
+});
 
-const singleStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const studentId = req.params.studentId;
-    const result = await studentService.singleStudent(studentId);
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Student retrieved successfully',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+const singleStudent = catchAsync(async (req, res) => {
+  const studentId = req.params.studentId;
+  const result = await studentService.singleStudent(studentId);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Student retrieved successfully',
+    data: result,
+  });
+});
 
-const updateStudent: RequestHandler = async (req, res, next) => {
-  try {
-    const payload = req.body;
-    const studentId = req.params.studentId;
-    const result = await studentService.updateStudent(studentId, payload);
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: 'Student updated successfully',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+const updateStudent = catchAsync(async (req, res) => {
+  const payload = req.body;
+  const studentId = req.params.studentId;
+  const result = await studentService.updateStudent(studentId, payload);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Student updated successfully',
+    data: result,
+  });
+});
 
 const deleteStudent: RequestHandler = async (req, res, next) => {
   try {
