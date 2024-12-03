@@ -20,7 +20,7 @@ const createStudent = async (password: string, studentData: TStudent) => {
   userData.role = 'student';
 
   // set manually generated id
-  userData.id = '20201-2-60-186';
+  userData.id = '2020-2-60-186';
 
   // create user
   const newUser = await User.create(userData);

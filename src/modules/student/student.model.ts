@@ -1,5 +1,70 @@
 import { model, Schema } from 'mongoose';
-import { TStudent } from './student.interface';
+import {
+  TGuardian,
+  TLocalGuardian,
+  TName,
+  TStudent,
+} from './student.interface';
+
+const nameSchema = new Schema<TName>({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  middleName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+});
+
+const guardianSchema = new Schema<TGuardian>({
+  fatherName: {
+    type: String,
+    required: true,
+  },
+  fatherOccupation: {
+    type: String,
+    required: true,
+  },
+  fatherContactNo: {
+    type: String,
+    required: true,
+  },
+  motherName: {
+    type: String,
+    required: true,
+  },
+  motherOccupation: {
+    type: String,
+    required: true,
+  },
+  motherContactNo: {
+    type: String,
+    required: true,
+  },
+});
+
+const localGuardian = new Schema<TLocalGuardian>({
+  name: {
+    type: String,
+    required: true,
+  },
+  occupation: {
+    type: String,
+    required: true,
+  },
+  contactNo: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+});
 
 const studentSchema = new Schema<TStudent>(
   {
@@ -15,17 +80,8 @@ const studentSchema = new Schema<TStudent>(
       ref: 'User',
     },
     name: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      middleName: {
-        type: String,
-      },
-      lastName: {
-        type: String,
-        required: true,
-      },
+      type: nameSchema,
+      required: true,
     },
     gender: ['male', 'female', 'others'],
     dateOfBirth: String,
@@ -51,48 +107,12 @@ const studentSchema = new Schema<TStudent>(
       required: true,
     },
     guardian: {
-      fatherName: {
-        type: String,
-        required: true,
-      },
-      fatherOccupation: {
-        type: String,
-        required: true,
-      },
-      fatherContactNo: {
-        type: String,
-        required: true,
-      },
-      motherName: {
-        type: String,
-        required: true,
-      },
-      motherOccupation: {
-        type: String,
-        required: true,
-      },
-      motherContactNo: {
-        type: String,
-        required: true,
-      },
+      type: guardianSchema,
+      required: true,
     },
     localGuardian: {
-      name: {
-        type: String,
-        required: true,
-      },
-      occupation: {
-        type: String,
-        required: true,
-      },
-      contactNo: {
-        type: String,
-        required: true,
-      },
-      address: {
-        type: String,
-        required: true,
-      },
+      type: localGuardian,
+      required: true,
     },
     profileImage: String,
     academicDept: String,
