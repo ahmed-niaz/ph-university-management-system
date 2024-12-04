@@ -11,4 +11,15 @@ academicSemesterRouter.post(
   academicSemesterController.createAcademicSemester,
 );
 
+academicSemesterRouter.get(
+  '/:semesterId',
+  academicSemesterController.singleAcademicSemester,
+);
+academicSemesterRouter.patch(
+  '/:semesterId',
+  academicSemesterController.updateAcademicSemester,
+);
+
+academicSemesterRouter.get('/', academicSemesterController.getAcademicSemester);
+
 export default academicSemesterRouter;
