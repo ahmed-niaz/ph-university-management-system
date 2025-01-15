@@ -2,11 +2,9 @@
 
 **\_Using TypeScript to create an Express application, integrating MongoDB with Mongoose to run the system,and use Mongoose schema validation to guarantee data integrity.**
 
+# **_system requirement_**
 
-# ***system requirement***
-
- - [***PH University Requirement Analysis***](https://www.notion.so/ph-university-requirement-analysis-14e84b2b67a08084a143ce90320802f0?pvs=4)
-
+- [**_PH University Requirement Analysis_**](https://safe-file-8cb.notion.site/ph-university-requirement-analysis-14e84b2b67a08084a143ce90320802f0)
 
 ## 💡 **_Features_**
 
@@ -83,8 +81,6 @@ npm run start
 
 - **_`/api/users`_**
 
-
   - **_POST_**
-
 
 - **_`/api/student`_**

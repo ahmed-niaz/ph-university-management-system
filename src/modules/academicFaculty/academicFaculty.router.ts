@@ -12,5 +12,17 @@ academicFacultyRouter.post(
   ),
   academicFacultyController.createAcademicFaculty,
 );
+academicFacultyRouter.get(
+  '/:facultyId',
+  academicFacultyController.singleAcademicFaculty,
+);
+academicFacultyRouter.patch(
+  '/:facultyId',
+  validateRequest(
+    academicFacultyValidation.updateAcademicFacultyValidationSchema,
+  ),
+  academicFacultyController.updatedAcademicFaculty,
+);
+academicFacultyRouter.get('/', academicFacultyController.getAcademicFaculties);
 
-export default academicFacultyRouter
+export default academicFacultyRouter;
