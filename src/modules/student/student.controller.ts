@@ -4,7 +4,8 @@ import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
 
 const getStudent = catchAsync(async (req, res) => {
-  const result = await studentService.getStudent();
+  console.log(req.query);
+  const result = await studentService.getStudent(req.query);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -24,17 +25,19 @@ const singleStudent = catchAsync(async (req, res) => {
   });
 });
 
-const updateStudent = catchAsync(async (req, res) => {
-  const payload = req.body;
-  const studentId = req.params.studentId;
-  const result = await studentService.updateStudent(studentId, payload);
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Student updated successfully',
-    data: result,
-  });
-});
+// const updateStudent = catchAsync(async (req, res) => {
+//   const payload = req.body;
+//   const studentId = req.params.studentId;
+//   const result = await studentService.updateStudent(studentId, payload);
+  
+//   console.log(result);
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: 'Student updated successfully',
+//     data: result,
+//   });
+// });
 
 const deleteStudent: RequestHandler = async (req, res, next) => {
   try {
@@ -55,6 +58,6 @@ const deleteStudent: RequestHandler = async (req, res, next) => {
 export const studentController = {
   getStudent,
   singleStudent,
-  updateStudent,
+  // updateStudent,
   deleteStudent,
 };

@@ -1,3 +1,4 @@
+// /*
 import { Request, Response, NextFunction } from 'express';
 
 interface ErrorDetails {
@@ -12,7 +13,7 @@ interface ErrorResponse {
   errorDetails?: ErrorDetails;
 }
 
-const globalErrorHandler = (
+const globalErrorHandler  = (
   error: Error,
   req: Request,
   res: Response,
@@ -44,3 +45,17 @@ const globalErrorHandler = (
 };
 
 export default globalErrorHandler;
+
+// */
+
+
+/*
+9.33
+success
+message
+errorSource: [
+path: " "
+message: " "
+]
+stack
+*/ 

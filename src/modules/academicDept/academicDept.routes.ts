@@ -16,6 +16,8 @@ academicDeptRouter.get(
   academicDeptController.singleAcademicDept,
 );
 
+academicDeptRouter.get('/',academicDeptController.getAcademicDept)
+
 academicDeptRouter.patch(
   '/:academicDept',
   validateRequest(academicDeptValidation.updateAcademicDeptValidationSchema),
