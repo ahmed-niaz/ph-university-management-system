@@ -16,7 +16,7 @@ academicDeptRouter.get(
   academicDeptController.singleAcademicDept,
 );
 
-academicDeptRouter.get('/',academicDeptController.getAcademicDept)
+academicDeptRouter.get('/', academicDeptController.getAcademicDept);
 
 academicDeptRouter.patch(
   '/:academicDept',

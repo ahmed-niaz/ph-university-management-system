@@ -25,13 +25,12 @@ const singleAcademicDept = async (id: string) => {
 };
 
 const updatedAcademicDept = async (id: string, payload: IAcademicDept) => {
-
-  console.log("academic dept id => ", id);
-  console.log('academic dept payload',payload);
+  console.log('academic dept id => ', id);
+  console.log('academic dept payload', payload);
   const faculty = await AcademicDept.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });
-  console.log('faculty',faculty);
+  console.log('faculty', faculty);
   return faculty;
 };
 

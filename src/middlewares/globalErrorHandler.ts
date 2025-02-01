@@ -13,7 +13,7 @@ interface ErrorResponse {
   errorDetails?: ErrorDetails;
 }
 
-const globalErrorHandler  = (
+const globalErrorHandler = (
   error: Error,
   req: Request,
   res: Response,
@@ -48,7 +48,6 @@ export default globalErrorHandler;
 
 // */
 
-
 /*
 9.33
 success
@@ -58,4 +57,4 @@ path: " "
 message: " "
 ]
 stack
-*/ 
+*/

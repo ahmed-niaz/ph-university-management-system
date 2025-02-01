@@ -13,15 +13,15 @@ const createAcademicDept = catchAsync(async (req, res) => {
   });
 });
 
-const getAcademicDept = catchAsync(async(req,res) => {
-  const result = await academicDeptService.getAcademicDept()
+const getAcademicDept = catchAsync(async (req, res) => {
+  const result = await academicDeptService.getAcademicDept();
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'all academic department retrieved successfully',
     data: result,
   });
-})
+});
 
 const singleAcademicDept = catchAsync(async (req, res) => {
   const academicDept = req.params.academicDept;

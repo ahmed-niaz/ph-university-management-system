@@ -133,8 +133,6 @@ const studentSchema = new Schema<TStudent>(
   },
 );
 
-
 // creating a custom static method
-
 
 export const Student = model<TStudent>('Student', studentSchema);

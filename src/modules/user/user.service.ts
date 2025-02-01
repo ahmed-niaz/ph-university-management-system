@@ -8,7 +8,6 @@ import { User } from './user.model';
 import { generateStudentId } from './user.utils';
 import AppErr from '../../errors/AppError';
 
-
 const createStudent = async (password: string, payload: TStudent) => {
   // create a user object
   const userData: Partial<TUser> = {};
@@ -42,7 +41,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     const newUser = await User.create([userData], { session });
 
     if (!newUser.length) {
-      throw new AppErr(404,'Failed to create new user');
+      throw new AppErr(404, 'Failed to create new user');
     }
 
     // set id, _id as user
@@ -53,7 +52,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     const newStudent = await Student.create([payload], { session });
 
     if (!newStudent.length) {
-      throw new AppErr(404,'Failed to create new student');
+      throw new AppErr(404, 'Failed to create new student');
     }
 
     // Commit the transaction

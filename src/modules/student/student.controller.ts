@@ -29,7 +29,7 @@ const singleStudent = catchAsync(async (req, res) => {
 //   const payload = req.body;
 //   const studentId = req.params.studentId;
 //   const result = await studentService.updateStudent(studentId, payload);
-  
+
 //   console.log(result);
 //   sendResponse(res, {
 //     statusCode: 200,

@@ -3,12 +3,16 @@ import mongoose from 'mongoose';
 import { Student } from './student.model';
 import AppErr from '../../errors/AppError';
 import { User } from '../user/user.model';
+import QueryBuilder from '../../builder/queryBuilder';
+import { searchableStdFields } from './student.constant';
 
 const getStudent = async (query: Record<string, unknown>) => {
+  /*
+  
   console.log('Query: ', query.searchTerm);
 
   // make a copy of query
-  const objQuery = {...query}
+  const objQuery = { ...query };
   // {email: {regex: query.searchTerm, $options: i}}
   const searchableStdFields = ['email', 'name.firstName', 'presentAddress'];
 
@@ -24,38 +28,66 @@ const getStudent = async (query: Record<string, unknown>) => {
   });
 
   // filtering [the thing we don't need in query]
-const excludeFields = ['searchTerm','sort','limit']
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
 
-excludeFields.forEach(value => delete objQuery[value])
-console.log({query,objQuery});
+  excludeFields.forEach((value) => delete objQuery[value]);
+  console.log({ query, objQuery });
 
-
-//  filter query [exact match]
-  const filterQuery =  searchQuery.find(objQuery).populate('admissionSemester').populate({
-    path: 'academicDept',
-    populate: 'academicFaculty',
-  });
-  
+  //  filter query [exact match]
+  const filterQuery = searchQuery
+    .find(objQuery)
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDept',
+      populate: 'academicFaculty',
+    });
 
   // return filterQuery;
 
-let sort = '-__v'
+  let sort = '-email';
 
-if (query?.sort) {
-  sort = query.sort as string;
-}
+  if (query?.sort) {
+    sort = query.sort as string;
+  }
 
-const sortQuery = filterQuery.sort(sort);
+  const sortQuery = filterQuery.sort(sort);
 
-let limit = 1;
+  let limit = 1;
+  let page = 1;
+  let skip = 0;
 
-if(query?.limit ) {
-  limit = query?.limit as number;
-}
+  if (query?.limit) {
+    limit = Number(query?.limit);
+  }
 
-const limitQuery = await sortQuery.limit(limit)
+  if (query?.page) {
+    page = Number(query?.page);
+    skip = (page - 1) * limit;
+  }
 
-  return limitQuery;
+  const paginateQuery = sortQuery.skip(skip);
+  const limitQuery = paginateQuery.limit(limit);
+
+  // field limiting
+  let fields = '-__v';
+
+  if (query?.fields) {
+    fields = (query.fields as string).split(',').join(' ');
+    console.log({ fields });
+  }
+
+  const fieldQuery = await limitQuery.select(fields);
+
+  return fieldQuery;
+
+  */
+
+  const stdQuery = new QueryBuilder(Student.find(), query)
+    .search(searchableStdFields).filter().sort().paginate().fields()
+   
+  const result = await stdQuery.modelQuery;
+
+  return result;
 };
 
 const singleStudent = async (id: string) => {
@@ -120,3 +152,11 @@ export const studentService = {
   // updateStudent,
   deleteStudent,
 };
+
+
+/*
+
+    
+    
+    
+*/ 
