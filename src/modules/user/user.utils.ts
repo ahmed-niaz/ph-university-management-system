@@ -47,3 +47,40 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
 
   return incrementId;
 };
+
+// faculty ID
+
+// retrieves the last created faculty ID from the db
+export const findLastFacultyId = async () => {
+  const lastFaculty = await User.findOne(
+    {
+      role: 'faculty', // find the last created faculty
+    },
+    {
+      id: 1, // only select the 'id' field
+      _id: 0, // exclude '_id'
+    },
+  )
+    .sort({
+      createdAt: -1, // sort in descending order to get the most recent faculty
+    })
+    .lean(); // optimize query by returning a plain js object.
+
+  return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined;
+};
+
+export const generatedFacultyId = async () => {
+  // initialized current faculty id is 0
+  let currentId = (0).toString();
+  const lastFacultyId = await findLastFacultyId();
+
+  if (lastFacultyId) {
+    currentId = lastFacultyId.substring(2);
+  }
+
+  let incrementId = (Number(currentId) + 1).toString().padStart(4, 0);
+
+  incrementId = `F-${incrementId}`;
+
+  return incrementId;
+};

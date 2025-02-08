@@ -11,6 +11,8 @@ userRouter.post(
   userController.createStudent,
 );
 
+userRouter.post('/create-faculty', userController.createFaculty);
+
 export default userRouter;
 
 // user -> then student

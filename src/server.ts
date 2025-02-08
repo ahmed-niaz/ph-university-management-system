@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import app from './app';
 import config from './config';
-import { query } from 'express';
+// import { query } from 'express';
 
 async function server() {
   try {

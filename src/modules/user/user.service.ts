@@ -5,10 +5,16 @@ import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import { generateStudentId } from './user.utils';
+import { generatedFacultyId, generateStudentId } from './user.utils';
 import AppErr from '../../errors/AppError';
+import { TFaculty } from '../faculty/faculty.interface';
+import { AcademicDept } from '../academicDept/academicDept.model';
+import { Faculty } from '../faculty/faculty.model';
 
+
+// create student
 const createStudent = async (password: string, payload: TStudent) => {
+  console.log('create std data >> [services] >>', { password, payload });
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -45,7 +51,7 @@ const createStudent = async (password: string, payload: TStudent) => {
     }
 
     // set id, _id as user
-    payload.id = newUser[0].id;
+    payload.id = newUser[0].id; // embedding id
     payload.user = newUser[0]._id; // reference _id
 
     // create a student (transaction - 2)
@@ -74,6 +80,83 @@ const createStudent = async (password: string, payload: TStudent) => {
   }
 };
 
+
+// create faculty
+const createFaculty = async (password: string, payload: TFaculty) => {
+  if (!payload) {
+    throw new Error(
+      'Payload is undefined. Make sure you are passing the correct data.',
+    );
+  }
+
+  console.log('Received Payload:', payload);
+  console.log('Password:', password);
+
+
+  // create a user objects
+  const userData: Partial<TUser> = {};
+
+  // if password is not given, use default password
+  userData.password = password || (config.default_password as string);
+
+  // set faculty role
+  userData.role = 'faculty';
+
+  // find academic dept info
+  const academicDept = await AcademicDept.findById(payload.academicDept);
+
+  if (!academicDept) {
+    throw new AppErr(400, 'academic dept is not found');
+  }
+
+  // start session [created isolated environment]
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // set generated id
+    userData.id = await generatedFacultyId();
+
+    // create user (transaction - 1)
+    const newUser = await User.create([userData], { session });
+
+    // create faculty
+    if (!newUser.length) {
+      throw new AppErr(400, 'failed to create user');
+    }
+
+    // set id, _id as user
+    payload.id = newUser[0].id; // embedding id
+    payload.user = newUser[0]._id; // ref id
+
+    // create a faculty
+    const newFaculty = await Faculty.create([payload], { session });
+
+    if (!newFaculty.length) {
+      throw new AppErr(400, 'failed to create faculty');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return newFaculty;
+  } catch (err) {
+    // Abort the transaction
+    await session.abortTransaction();
+
+    // Optionally log the error
+    console.error('Error in createStudent:', err);
+
+    // Rethrow the error for higher-level handling
+    throw err;
+  } finally {
+    // Always end the session
+    await session.endSession();
+  }
+};
+
 export const userService = {
   createStudent,
+  createFaculty,
 };

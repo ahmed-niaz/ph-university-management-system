@@ -82,16 +82,26 @@ const getStudent = async (query: Record<string, unknown>) => {
 
   */
 
-  const stdQuery = new QueryBuilder(Student.find(), query)
-    .search(searchableStdFields).filter().sort().paginate().fields()
-   
+  const stdQuery = new QueryBuilder(
+    Student.find().populate('admissionSemester').populate({
+      path: 'academicDept',
+      populate: 'academicFaculty',
+    }),
+    query,
+  )
+    .search(searchableStdFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
   const result = await stdQuery.modelQuery;
 
   return result;
 };
 
 const singleStudent = async (id: string) => {
-  const result = await Student.findOne({ id })
+  const result = await Student.findById( id )
     .populate('admissionSemester')
     .populate({
       path: 'academicDept',
@@ -116,8 +126,8 @@ const deleteStudent = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deletedStd = await Student.findOneAndUpdate(
-      { id },
+    const deletedStd = await Student.findByIdAndUpdate(
+      id ,
       { isDeleted: true },
       { new: true, session },
     );
@@ -126,8 +136,11 @@ const deleteStudent = async (id: string) => {
       throw new AppErr(400, 'Failed to delete student');
     }
 
+    // const user_id from deleted STD
+    const userID = deletedStd.user;
+
     const deletedUser = await User.findByIdAndUpdate(
-      { _id: id },
+      userID,
       { isDeleted: true },
       { new: true, session },
     );
@@ -153,10 +166,9 @@ export const studentService = {
   deleteStudent,
 };
 
-
 /*
 
     
     
     
-*/ 
+*/
