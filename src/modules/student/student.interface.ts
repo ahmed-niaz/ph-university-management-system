@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 
-
 export type TName = {
   firstName: string;
   middleName?: string;
@@ -45,5 +44,3 @@ export type TStudent = {
   admissionSemester: Types.ObjectId;
   isDeleted: boolean;
 };
-
-

@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["maxlength", "virtuals"]
+  "cSpell.words": ["maxlength", "virtuals"],
+  "editor.minimap.enabled": false
 }

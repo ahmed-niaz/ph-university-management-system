@@ -11,7 +11,6 @@ import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDept } from '../academicDept/academicDept.model';
 import { Faculty } from '../faculty/faculty.model';
 
-
 // create student
 const createStudent = async (password: string, payload: TStudent) => {
   console.log('create std data >> [services] >>', { password, payload });
@@ -80,7 +79,6 @@ const createStudent = async (password: string, payload: TStudent) => {
   }
 };
 
-
 // create faculty
 const createFaculty = async (password: string, payload: TFaculty) => {
   if (!payload) {
@@ -91,7 +89,6 @@ const createFaculty = async (password: string, payload: TFaculty) => {
 
   console.log('Received Payload:', payload);
   console.log('Password:', password);
-
 
   // create a user objects
   const userData: Partial<TUser> = {};

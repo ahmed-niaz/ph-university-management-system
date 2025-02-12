@@ -101,7 +101,7 @@ const getStudent = async (query: Record<string, unknown>) => {
 };
 
 const singleStudent = async (id: string) => {
-  const result = await Student.findById( id )
+  const result = await Student.findById(id)
     .populate('admissionSemester')
     .populate({
       path: 'academicDept',
@@ -127,7 +127,7 @@ const deleteStudent = async (id: string) => {
     session.startTransaction();
 
     const deletedStd = await Student.findByIdAndUpdate(
-      id ,
+      id,
       { isDeleted: true },
       { new: true, session },
     );

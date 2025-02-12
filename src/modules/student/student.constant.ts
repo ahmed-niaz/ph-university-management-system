@@ -1,2 +1,5 @@
-
-export const searchableStdFields = ['email', 'name.firstName', 'presentAddress'];
+export const searchableStdFields = [
+  'email',
+  'name.firstName',
+  'presentAddress',
+];
