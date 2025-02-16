@@ -63,10 +63,24 @@ const deleteCourse = catchAsync(async (req, res) => {
   });
 });
 
+// assign  multiple faculties
+const assignCourseFaculties = catchAsync(async (req, res) => {
+  const courseId = req.params.courseId;
+  const payload = req.body;
+  const result = await courseService.assignCourseFaculties(courseId, payload);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: ' assign  multiple faculties added successfully. 👋',
+    data: result,
+  });
+});
+
 export const courseController = {
   createCourse,
   getCourses,
   singleCourse,
   deleteCourse,
   updateCourse,
+  assignCourseFaculties,
 };

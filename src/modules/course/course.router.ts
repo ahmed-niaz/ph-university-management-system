@@ -22,4 +22,9 @@ courseRouter.patch(
 
 courseRouter.delete('/:courseId', courseController.deleteCourse);
 
+courseRouter.patch(
+  '/:courseId/assign-faculties',
+  courseController.assignCourseFaculties,
+);
+
 export default courseRouter;
