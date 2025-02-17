@@ -22,9 +22,16 @@ courseRouter.patch(
 
 courseRouter.delete('/:courseId', courseController.deleteCourse);
 
-courseRouter.patch(
+courseRouter.put(
   '/:courseId/assign-faculties',
+  validateRequest(courseValidation.assignMultipleFacultiesValidationSchema),
   courseController.assignCourseFaculties,
+);
+
+courseRouter.delete(
+  '/:courseId/remove-faculties',
+  validateRequest(courseValidation.assignMultipleFacultiesValidationSchema),
+  courseController.removeCourseFaculties,
 );
 
 export default courseRouter;

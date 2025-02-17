@@ -45,7 +45,9 @@ const courseSchema = new Schema<TCourse>({
   },
 });
 
-// course faculty schema
+export const Course = model<TCourse>('Course', courseSchema);
+
+// assigning multiple courses to multiple faculty members.
 const courseFacultySchema = new Schema<TAssignCourseFaculty>({
   course: {
     type: Schema.Types.ObjectId,
@@ -60,7 +62,6 @@ const courseFacultySchema = new Schema<TAssignCourseFaculty>({
   ],
 });
 
-export const Course = model<TCourse>('Course', courseSchema);
 export const CourseFaculty = model<TAssignCourseFaculty>(
   'CourseFaculty',
   courseFacultySchema,

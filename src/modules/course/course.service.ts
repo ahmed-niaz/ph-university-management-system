@@ -211,11 +211,34 @@ const assignCourseFaculties = async (
   const result = await CourseFaculty.findByIdAndUpdate(
     id,
     {
+      course: id,
       $addToSet: { faculties: { $each: payload } },
     },
-    { upsert: true, new: true },
+    {
+      upsert: true,
+      new: true,
+    },
   );
 
+  return result;
+};
+
+// remove faculties
+const removeCourseFaculties = async (
+  id: string,
+  payload: Partial<TAssignCourseFaculty>,
+) => {
+  const result = await CourseFaculty.findByIdAndUpdate(
+    id,
+    {
+      $pull: {
+        faculties: { $in: payload },
+      },
+    },
+    {
+      new: true,
+    },
+  );
   return result;
 };
 
@@ -226,4 +249,5 @@ export const courseService = {
   updateCourse,
   deleteCourse,
   assignCourseFaculties,
+  removeCourseFaculties,
 };
