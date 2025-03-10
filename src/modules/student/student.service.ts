@@ -83,7 +83,7 @@ const getStudent = async (query: Record<string, unknown>) => {
   */
 
   const stdQuery = new QueryBuilder(
-    Student.find().populate('admissionSemester').populate({
+    Student.find().populate('user').populate('admissionSemester').populate({
       path: 'academicDept',
       populate: 'academicFaculty',
     }),

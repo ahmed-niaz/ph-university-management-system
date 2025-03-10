@@ -5,11 +5,16 @@ import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import { generatedFacultyId, generateStudentId } from './user.utils';
+import {
+  generatedAdminId,
+  generatedFacultyId,
+  generateStudentId,
+} from './user.utils';
 import AppErr from '../../errors/AppError';
 import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDept } from '../academicDept/academicDept.model';
 import { Faculty } from '../faculty/faculty.model';
+import { Admin } from '../admin/admin.model';
 
 // create student
 const createStudent = async (password: string, payload: TStudent) => {
@@ -81,6 +86,7 @@ const createStudent = async (password: string, payload: TStudent) => {
 
 // create faculty
 const createFaculty = async (password: string, payload: TFaculty) => {
+  console.log('create std data >> [services] >>', { password, payload });
   if (!payload) {
     throw new Error(
       'Payload is undefined. Make sure you are passing the correct data.',
@@ -153,7 +159,70 @@ const createFaculty = async (password: string, payload: TFaculty) => {
   }
 };
 
+// create admin
+const createAdmin = async (password: string, payload: TFaculty) => {
+  if (!payload) {
+    throw new Error(
+      'Payload is undefined. Make sure you are passing the correct data.',
+    );
+  }
+
+  // create user object
+  const userData: Partial<TUser> = {};
+
+  // set role
+  userData.role = 'admin';
+
+  // if password is not given, use default password
+  userData.password = password || (config.default_password as string);
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // set generated id
+    userData.id = await generatedAdminId();
+
+    // create user [transaction - 1]
+    const newUser = await User.create([userData], { session });
+
+    // create a admin
+    if (!newUser.length) {
+      throw new AppErr(400, 'failed to create admin');
+    }
+
+    // set id, _id as user
+    payload.id = newUser[0].id;
+    payload.user = newUser[0]._id; //reference id
+
+    // create admin
+    const newAdmin = await Admin.create([payload], { session });
+
+    if (!newAdmin.length) {
+      throw new AppErr(400, 'failed to create admin');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+    return newAdmin;
+  } catch (err) {
+    // Abort the transaction
+    await session.abortTransaction();
+
+    // Optionally log the error
+    console.error('Error in createStudent:', err);
+
+    // Rethrow the error for higher-level handling
+    throw err;
+  } finally {
+    // Always end the session
+    await session.endSession();
+  }
+};
+
 export const userService = {
   createStudent,
   createFaculty,
+  createAdmin,
 };

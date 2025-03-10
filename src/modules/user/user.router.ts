@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { userController } from './user.controller';
+
 // import validateRequest from '../../middlewares/validateRequest';
 // import { studentValidations } from '../student/student.validation';
 
@@ -12,6 +13,8 @@ userRouter.post(
 );
 
 userRouter.post('/create-faculty', userController.createFaculty);
+
+userRouter.post('/create-admin', userController.createAdmin);
 
 export default userRouter;
 
