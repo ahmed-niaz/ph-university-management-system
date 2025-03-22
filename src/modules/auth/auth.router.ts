@@ -4,6 +4,7 @@ import { AuthValidation } from './auth.validation';
 import { authController } from './auth.controller';
 import { userRole } from '../user/user.constant';
 import auth from '../../middlewares/auth';
+
 const authenticationRouter = express.Router();
 
 authenticationRouter.post(
@@ -23,6 +24,18 @@ authenticationRouter.post(
   '/refresh-token',
   validateRequest(AuthValidation.refreshValidationSchema),
   authController.refreshToken,
+);
+
+authenticationRouter.post(
+  '/forget-password',
+  validateRequest(AuthValidation.forgetPasswordValidationSchema),
+  authController.forgetPassword,
+);
+
+authenticationRouter.post(
+  '/reset-password',
+  validateRequest(AuthValidation.resetPasswordValidationSchema),
+  authController.resetPassword,
 );
 
 export default authenticationRouter;

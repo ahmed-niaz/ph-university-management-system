@@ -6,7 +6,11 @@ import auth from '../../middlewares/auth';
 // import { updateStudentValidationSchema } from './student.validation';
 
 const studentRouter = Router();
-studentRouter.get('/:studentId', studentController.singleStudent);
+studentRouter.get(
+  '/:studentId',
+  auth(userRole.admin, userRole.faculty, userRole.student),
+  studentController.singleStudent,
+);
 // studentRouter.patch('/:studentId',
 //     validateRequest(updateStudentValidationSchema),
 //      studentController.updateStudent);

@@ -15,6 +15,8 @@ import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDept } from '../academicDept/academicDept.model';
 import { Faculty } from '../faculty/faculty.model';
 import { Admin } from '../admin/admin.model';
+import { verifyToken } from '../auth/auth.utils';
+import { userRole } from './user.constant';
 
 // create student
 const createStudent = async (password: string, payload: TStudent) => {
@@ -27,6 +29,8 @@ const createStudent = async (password: string, payload: TStudent) => {
 
   // set student role
   userData.role = 'student';
+  // set std email
+  userData.email = payload.email;
 
   // find academic semester info
   const admissionSemester = await AcademicSemester.findById(
@@ -104,6 +108,8 @@ const createFaculty = async (password: string, payload: TFaculty) => {
 
   // set faculty role
   userData.role = 'faculty';
+  // set faculty email
+  userData.email = payload.email;
 
   // find academic dept info
   const academicDept = await AcademicDept.findById(payload.academicDept);
@@ -170,8 +176,10 @@ const createAdmin = async (password: string, payload: TFaculty) => {
   // create user object
   const userData: Partial<TUser> = {};
 
-  // set role
+  // set admin role
   userData.role = 'admin';
+  // set admin email
+  userData.email = payload.email;
 
   // if password is not given, use default password
   userData.password = password || (config.default_password as string);
@@ -221,8 +229,58 @@ const createAdmin = async (password: string, payload: TFaculty) => {
   }
 };
 
+// getMe
+/*
+const getMe = async (token: string) => {
+  const decoded = verifyToken(token, config.jwt_access_token as string);
+  // form decoded we get the id,role
+  const { userId, role } = decoded;
+  console.log(userId, role);
+
+  let result = null
+  if(role === userRole.student){
+    result = await Student.findOne({id: userId})
+  }
+
+  if(role === userRole.admin) {
+    result = await Admin.findOne({id: userId})
+  }
+
+  if(role === userRole.faculty) {
+    result = await Faculty.findOne({id: userId})
+  }
+  // const result = await
+  return result;
+};
+*/
+const getMe = async (userId: string, role: string) => {
+  let result = null;
+  if (role === userRole.student) {
+    result = await Student.findOne({ id: userId }).populate('user');
+  }
+
+  if (role === userRole.admin) {
+    result = await Admin.findOne({ id: userId });
+  }
+
+  if (role === userRole.faculty) {
+    result = await Faculty.findOne({ id: userId });
+  }
+  // const result = await
+  return result;
+};
+
+// change status
+const changeStatus = async (id: string, payload: { status: string }) => {
+  const result = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+  return result;
+};
 export const userService = {
   createStudent,
   createFaculty,
   createAdmin,
+  getMe,
+  changeStatus,
 };
