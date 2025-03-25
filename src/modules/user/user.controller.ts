@@ -1,13 +1,16 @@
 import { userService } from './user.service';
 import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
-import AppErr from '../../errors/AppError';
 
 // create student
 const createStudent = catchAsync(async (req, res) => {
+
+  // console.log(req.file);
+  // console.log((req.body));
+
   const { password, student: studentData } = req.body;
-  console.log('create std data >> [controllers] >>', { password, studentData });
-  const result = await userService.createStudent(password, studentData);
+  // console.log('create std data >> [controllers] >>', { password, studentData });
+  const result = await userService.createStudent(req.file,password, studentData);
   sendResponse(res, {
     statusCode: 200,
     success: true,

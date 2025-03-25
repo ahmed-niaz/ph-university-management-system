@@ -15,12 +15,12 @@ import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDept } from '../academicDept/academicDept.model';
 import { Faculty } from '../faculty/faculty.model';
 import { Admin } from '../admin/admin.model';
-import { verifyToken } from '../auth/auth.utils';
 import { userRole } from './user.constant';
+import { sendImageToCloudinary } from '../../utils/sendImageCloudinary';
 
 // create student
-const createStudent = async (password: string, payload: TStudent) => {
-  console.log('create std data >> [services] >>', { password, payload });
+const createStudent = async (file:any,password: string, payload: TStudent) => {
+  // console.log('create std data >> [services] >>', { password, payload });
   // create a user object
   const userData: Partial<TUser> = {};
 
@@ -48,8 +48,15 @@ const createStudent = async (password: string, payload: TStudent) => {
       throw new Error('admissionSemester id is not valid');
     }
 
+  
     // set generated id
     userData.id = await generateStudentId(admissionSemester);
+
+    const imageName  = `${userData.id}_${payload?.name?.firstName}`
+    const path = file?.path
+    // send image to cloudinary
+   const imageData = await sendImageToCloudinary(imageName,path)
+   console.log('image-data',imageData);
 
     // create a user (transaction - 1)
     const newUser = await User.create([userData], { session });
@@ -61,6 +68,9 @@ const createStudent = async (password: string, payload: TStudent) => {
     // set id, _id as user
     payload.id = newUser[0].id; // embedding id
     payload.user = newUser[0]._id; // reference _id
+
+    // add profile image into the mongodb
+    payload.profileImage = imageData.secure_url 
 
     // create a student (transaction - 2)
     const newStudent = await Student.create([payload], { session });
